@@ -25,7 +25,7 @@ public class Conexion {
     {
         try
         {
-        cn=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","VentasSport","1234");
+        cn=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","VentasSport","123teamo");
            st=cn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
            
         }

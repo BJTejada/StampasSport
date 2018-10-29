@@ -136,16 +136,17 @@ public class Clientes extends javax.swing.JFrame {
         jPanel3.setBounds(10, 140, 242, 251);
 
         btn_agregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/signo-mas-para-agregar.png"))); // NOI18N
+        btn_agregar.setText("Agregar");
         btn_agregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_agregarActionPerformed(evt);
             }
         });
         getContentPane().add(btn_agregar);
-        btn_agregar.setBounds(270, 120, 50, 50);
+        btn_agregar.setBounds(710, 70, 120, 30);
 
         btn_editar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/editar.png"))); // NOI18N
-        btn_editar.setText("editar");
+        btn_editar.setText("Editar");
         btn_editar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_editarActionPerformed(evt);
@@ -170,7 +171,7 @@ public class Clientes extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
 
         getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(268, 188, 765, 318);
+        jScrollPane1.setBounds(270, 110, 765, 318);
 
         rb_nombre.setBackground(new java.awt.Color(255, 255, 255));
         rb_nombre.setText("Nombre");
@@ -208,13 +209,14 @@ public class Clientes extends javax.swing.JFrame {
 
         btn_salir.setBackground(new java.awt.Color(204, 0, 0));
         btn_salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/salida.png"))); // NOI18N
+        btn_salir.setText("Regresar");
         btn_salir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_salirActionPerformed(evt);
             }
         });
         getContentPane().add(btn_salir);
-        btn_salir.setBounds(980, 10, 50, 50);
+        btn_salir.setBounds(900, 480, 120, 40);
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/clientes.jpg"))); // NOI18N
@@ -222,12 +224,12 @@ public class Clientes extends javax.swing.JFrame {
         jLabel9.setBounds(70, 10, 131, 130);
 
         btn_cancecar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/cancelar.png"))); // NOI18N
-        btn_cancecar.setText("cancelar");
+        btn_cancecar.setText("Cancelar");
         getContentPane().add(btn_cancecar);
         btn_cancecar.setBounds(60, 460, 120, 50);
 
         btn_guardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/guardar.png"))); // NOI18N
-        btn_guardar.setText("guardar");
+        btn_guardar.setText("Guardar");
         btn_guardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_guardarActionPerformed(evt);
