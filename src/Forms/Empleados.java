@@ -31,7 +31,7 @@ public class Empleados extends javax.swing.JFrame {
      public int duiPA =-1;
      String fecha ;
      public boolean mostrarP=false;
-     public String sql="select * from informaticos.empleados order by  empleados.idestado desc,empleados.nombre asc";
+     public String sql="select * from empleados order by  empleados.idestado desc,empleados.nombre asc";
      public int UsuarioSel =0;
     //Para establecer el modelo al JTable
     DefaultTableModel modelo = new DefaultTableModel();

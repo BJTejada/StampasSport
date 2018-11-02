@@ -5,7 +5,12 @@
  */
 package Forms;
 
+import Datos.Conexion;
+import Datos.GenerarCodigo;
 import Datos.Ventas;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -18,10 +23,22 @@ public class ventas extends javax.swing.JFrame {
     /**
      * Creates new form ventas
      */
+       private final Conexion con = new Conexion();
+       private final Connection cn= con.conectar();
     DefaultTableModel modelo4;
+      DefaultTableModel modelo3;
     public ventas() {
         initComponents();
         modelo4 = new DefaultTableModel();
+        modelo3 = new DefaultTableModel();
+        
+        
+            modelo3.addColumn("Nombre");
+            modelo3.addColumn("cantidad");
+            modelo3.addColumn("precio");
+            modelo3.addColumn("precio * cantidad");
+        cargarcodigo();
+        mostrar();
     }
 
     /**
@@ -37,15 +54,11 @@ public class ventas extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         txt_factura = new javax.swing.JTextField();
         txt_fecha = new javax.swing.JFormattedTextField();
         jLabel5 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         cb_cliente = new javax.swing.JComboBox<>();
-        cb_producto = new javax.swing.JComboBox<>();
-        jLabel8 = new javax.swing.JLabel();
         btn_nuevo = new javax.swing.JButton();
         btn_cancelar = new javax.swing.JButton();
         btn_guardar = new javax.swing.JButton();
@@ -55,15 +68,18 @@ public class ventas extends javax.swing.JFrame {
         txt_sub_total = new javax.swing.JTextField();
         jButton7 = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
-        txt_existencia = new javax.swing.JTextField();
-        txt_precio = new javax.swing.JTextField();
-        txt_cantidad = new javax.swing.JTextField();
         txt_total = new javax.swing.JTextField();
-        txt_total2 = new javax.swing.JTextField();
+        txt_cantidad = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         cb_vende = new javax.swing.JComboBox<>();
+        txtBuscar = new javax.swing.JTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
-        cb_vende2 = new javax.swing.JComboBox<>();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        txt_total4 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(960, 600));
@@ -87,7 +103,7 @@ public class ventas extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
 
         getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(20, 175, 795, 348);
+        jScrollPane1.setBounds(20, 230, 795, 270);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -99,60 +115,39 @@ public class ventas extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Fecha:");
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(60, 70, 38, 15);
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Cliente:");
-        getContentPane().add(jLabel3);
-        jLabel3.setBounds(50, 100, 46, 15);
+        jLabel2.setBounds(250, 30, 38, 15);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Vendedor:");
         getContentPane().add(jLabel4);
-        jLabel4.setBounds(40, 140, 70, 15);
+        jLabel4.setBounds(20, 510, 70, 15);
         getContentPane().add(txt_factura);
         txt_factura.setBounds(120, 20, 120, 30);
 
         txt_fecha.setText("DD/MM/YYYY");
         getContentPane().add(txt_fecha);
-        txt_fecha.setBounds(120, 60, 100, 30);
+        txt_fecha.setBounds(310, 20, 100, 30);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Producto:");
         getContentPane().add(jLabel5);
-        jLabel5.setBounds(310, 20, 61, 30);
-
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("Existencia");
-        getContentPane().add(jLabel7);
-        jLabel7.setBounds(310, 110, 60, 15);
+        jLabel5.setBounds(40, 60, 61, 30);
 
         cb_cliente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         getContentPane().add(cb_cliente);
-        cb_cliente.setBounds(120, 100, 120, 30);
-
-        cb_producto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        getContentPane().add(cb_producto);
-        cb_producto.setBounds(380, 20, 120, 30);
-
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setText("Precio:");
-        getContentPane().add(jLabel8);
-        jLabel8.setBounds(310, 140, 41, 15);
+        cb_cliente.setBounds(510, 20, 120, 30);
 
         btn_nuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/signo-mas-para-agregar.png"))); // NOI18N
+        btn_nuevo.setText("Agregar ");
         btn_nuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_nuevoActionPerformed(evt);
             }
         });
         getContentPane().add(btn_nuevo);
-        btn_nuevo.setBounds(550, 110, 50, 50);
+        btn_nuevo.setBounds(820, 140, 120, 50);
 
         btn_cancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/cancelar.png"))); // NOI18N
         btn_cancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -161,7 +156,7 @@ public class ventas extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btn_cancelar);
-        btn_cancelar.setBounds(760, 110, 50, 50);
+        btn_cancelar.setBounds(830, 370, 50, 50);
 
         btn_guardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/guardar.png"))); // NOI18N
         btn_guardar.addActionListener(new java.awt.event.ActionListener() {
@@ -170,7 +165,7 @@ public class ventas extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btn_guardar);
-        btn_guardar.setBounds(620, 110, 50, 50);
+        btn_guardar.setBounds(830, 240, 50, 50);
 
         btn_editar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/editar.png"))); // NOI18N
         btn_editar.addActionListener(new java.awt.event.ActionListener() {
@@ -179,24 +174,25 @@ public class ventas extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btn_editar);
-        btn_editar.setBounds(690, 110, 50, 50);
+        btn_editar.setBounds(830, 300, 50, 50);
 
         btn_salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/salida.png"))); // NOI18N
+        btn_salir.setText("Regresar");
         btn_salir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_salirActionPerformed(evt);
             }
         });
         getContentPane().add(btn_salir);
-        btn_salir.setBounds(890, 10, 50, 70);
+        btn_salir.setBounds(840, 620, 120, 40);
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Sub total:");
         getContentPane().add(jLabel9);
-        jLabel9.setBounds(260, 540, 90, 14);
+        jLabel9.setBounds(540, 520, 90, 14);
         getContentPane().add(txt_sub_total);
-        txt_sub_total.setBounds(340, 530, 153, 30);
+        txt_sub_total.setBounds(640, 510, 153, 30);
 
         jButton7.setText("Generar factura");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
@@ -205,33 +201,51 @@ public class ventas extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton7);
-        jButton7.setBounds(796, 527, 130, 30);
+        jButton7.setBounds(650, 600, 130, 30);
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setText("Cantidad:");
         getContentPane().add(jLabel10);
-        jLabel10.setBounds(310, 70, 59, 15);
-        getContentPane().add(txt_existencia);
-        txt_existencia.setBounds(380, 100, 120, 30);
-        getContentPane().add(txt_precio);
-        txt_precio.setBounds(380, 130, 120, 30);
-        getContentPane().add(txt_cantidad);
-        txt_cantidad.setBounds(380, 60, 120, 30);
+        jLabel10.setBounds(250, 70, 59, 15);
         getContentPane().add(txt_total);
-        txt_total.setBounds(600, 530, 153, 30);
-        getContentPane().add(txt_total2);
-        txt_total2.setBounds(600, 530, 153, 30);
+        txt_total.setBounds(640, 560, 153, 30);
+        getContentPane().add(txt_cantidad);
+        txt_cantidad.setBounds(310, 60, 90, 30);
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
         jLabel11.setText("Total pagar");
         getContentPane().add(jLabel11);
-        jLabel11.setBounds(520, 540, 90, 14);
+        jLabel11.setBounds(540, 570, 90, 14);
 
         cb_vende.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         getContentPane().add(cb_vende);
-        cb_vende.setBounds(120, 140, 120, 30);
+        cb_vende.setBounds(90, 510, 120, 30);
+
+        txtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarKeyReleased(evt);
+            }
+        });
+        getContentPane().add(txtBuscar);
+        txtBuscar.setBounds(120, 60, 120, 30);
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable2);
+
+        getContentPane().add(jScrollPane2);
+        jScrollPane2.setBounds(20, 110, 790, 100);
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/W4.png"))); // NOI18N
         jLabel6.setToolTipText("");
@@ -239,11 +253,25 @@ public class ventas extends javax.swing.JFrame {
         jLabel6.setMinimumSize(new java.awt.Dimension(960, 570));
         jLabel6.setPreferredSize(new java.awt.Dimension(960, 570));
         getContentPane().add(jLabel6);
-        jLabel6.setBounds(0, 0, 960, 570);
+        jLabel6.setBounds(0, 0, 970, 670);
 
-        cb_vende2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        getContentPane().add(cb_vende2);
-        cb_vende2.setBounds(120, 140, 120, 30);
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setText("Total pagar");
+        getContentPane().add(jLabel12);
+        jLabel12.setBounds(520, 540, 90, 14);
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("Cliente:");
+        getContentPane().add(jLabel7);
+        jLabel7.setBounds(440, 30, 46, 15);
+
+        jLabel8.setText("jLabel8");
+        getContentPane().add(jLabel8);
+        jLabel8.setBounds(440, 20, 60, 20);
+        getContentPane().add(txt_total4);
+        txt_total4.setBounds(450, 510, 153, 30);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -262,18 +290,105 @@ public class ventas extends javax.swing.JFrame {
         from.setVisible(true);
     }//GEN-LAST:event_btn_salirActionPerformed
 
+    void cargarcodigo()
+    {
+       int j;
+       String num="";
+       String c = "";
+       String SQL="select max(numfactura) from ventas";
+        try {
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(SQL);
+            if(rs.next())
+            {
+                c=rs.getString(1);
+            }
+               
+            if(c==null)
+            {
+                txt_factura.setText("CD0001");
+            }else{
+                char r1=c.charAt(2);
+                char r2=c.charAt(3);
+                char r3=c.charAt(4);
+                char r4=c.charAt(5);
+                String r ="";
+                r = "" +r1+r2+r3+r4;
+                
+                
+                j=Integer.parseInt(r);
+                GenerarCodigo gen = new GenerarCodigo();
+                gen.generar(j);
+              txt_factura.setText("CD"+gen.serie());
+                txt_factura.enable(false);
+            }
+            
+        } catch (Exception e) {
+        }
+    }
+    
+    
+    
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void btn_nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_nuevoActionPerformed
         // TODO add your handling code here:
+            if(Integer.parseInt(txt_cantidad.getText())>0){
+          try{
+         //  
+            
+        
+        
+      //  JOptionPane.showMessageDialog(null,""+cadena2[0]);
+             
+           // 
+       
+        int fsel=jTable2.getSelectedRow();
+        String nombre=jTable2.getValueAt(fsel,1).toString();
+        //String Bcan=tablaExistencias1.getValueAt(fsel,0).toString()-cant;
+        
+        String precio=jTable2.getValueAt(fsel,3).toString();
+        String cant=txt_cantidad.getText();
+        //String lote=tablaExistencias1.getValueAt(fsel,3).toString();
+        String Bcan=jTable2.getValueAt(fsel,2).toString();
+        
+        //Plote=lote;
+        String Resultado;
+        double x;
+        x=(Double.parseDouble(precio)*(Double.parseDouble(cant)));
+        Resultado=String.valueOf(x);
+        String []Datos={nombre,cant,precio,Resultado};
+        
+        
+        modelo3.addRow(Datos);
+        
+        
+        jTable1.setModel(modelo3);
+        
+        double calcula=(Double.parseDouble(Resultado));
+      //  total=total + calcula;
+      //  txtTotal.setText(""+total);
+        
+        }
+        catch (Exception ex){
+             JOptionPane.showMessageDialog(null,ex.toString());
+            
+        }
+         txt_cantidad.setText("");
+         
+ 
         
         
         
-        
-        
-        
+            }
+            
+            else{
+                JOptionPane.showMessageDialog(null,"Mahe Ingresa numeros Positivos");
+            
+                
+            }
         
         
         
@@ -333,6 +448,41 @@ public class ventas extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btn_guardarActionPerformed
 
+    
+    
+      public void mostrar(){
+        
+        try{
+            DefaultTableModel model;
+            Ventas cl=new Ventas();
+            model=cl.mostrarProductos();
+            jTable2.setModel(model);
+           
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(rootPane, e);
+            
+        }
+        
+        
+    }
+    
+    private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
+        // TODO add your handling code here:
+        DefaultTableModel model;
+        if(txtBuscar.getText().equals("")){
+        mostrar();
+        }
+        else{
+        Ventas cli =new Ventas();
+       model= cli.mostrarProductoscmp(txtBuscar.getText());
+        jTable2.setModel(model);
+        }
+        
+        
+        
+    }//GEN-LAST:event_txtBuscarKeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -375,15 +525,13 @@ public class ventas extends javax.swing.JFrame {
     private javax.swing.JButton btn_nuevo;
     private javax.swing.JButton btn_salir;
     private javax.swing.JComboBox<String> cb_cliente;
-    private javax.swing.JComboBox<String> cb_producto;
     private javax.swing.JComboBox<String> cb_vende;
-    private javax.swing.JComboBox<String> cb_vende2;
     private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -391,14 +539,15 @@ public class ventas extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JTextField txtBuscar;
     private javax.swing.JTextField txt_cantidad;
-    private javax.swing.JTextField txt_existencia;
     private javax.swing.JTextField txt_factura;
     private javax.swing.JFormattedTextField txt_fecha;
-    private javax.swing.JTextField txt_precio;
     private javax.swing.JTextField txt_sub_total;
     private javax.swing.JTextField txt_total;
-    private javax.swing.JTextField txt_total2;
+    private javax.swing.JTextField txt_total4;
     // End of variables declaration//GEN-END:variables
 }

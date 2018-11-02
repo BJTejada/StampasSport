@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import oracle.jdbc.OracleCallableStatement;
+import oracle.jdbc.OracleTypes;
 public class Ventas {
        static ResultSet rs;
     private final Conexion con = new Conexion();
@@ -57,7 +59,86 @@ public class Ventas {
            }
            
            
-       }        
+       }
+    
+    
+    
+    public DefaultTableModel mostrarProductos(){
+        DefaultTableModel model;
+        try{
+            CallableStatement csta=cn.prepareCall("{call verProductosVentas(?)}");
+            csta.registerOutParameter(1, OracleTypes.CURSOR);
+            rs=csta.executeQuery();
+            //ResultSet rs =(ResultSet)csta.getObject("out_data");
+            ResultSet rs =((OracleCallableStatement)csta).getCursor(1);
+            
+            Object Datos[]=new Object[4];
+            model=new DefaultTableModel();
+            model.addColumn("Codigo de Inventario");
+            model.addColumn("Nombre Producto");
+            model.addColumn("Cantidad");
+            model.addColumn("Precio");
+       
+        
+        
+          
+          
+        
+            while(rs.next()){
+                for(int i=0;i<4;i++)
+                    Datos[i]=rs.getObject(i+1);
+                 model.addRow(Datos);
+            }
+           
+            return model;
+        }
+        catch(SQLException e)
+        {
+            return null;
+        }
+      //  return model;
+    }
+    
+    
+    public DefaultTableModel mostrarProductoscmp(String Bus){
+        DefaultTableModel model;
+        try{
+            CallableStatement csta=cn.prepareCall("{call verProductosVentascmp(?,?)}");
+            csta.registerOutParameter(1, OracleTypes.CURSOR);
+            csta.setString(2,Bus);
+            rs=csta.executeQuery();
+            //ResultSet rs =(ResultSet)csta.getObject("out_data");
+            ResultSet rs =((OracleCallableStatement)csta).getCursor(1);
+            
+            Object Datos[]=new Object[4];
+            model=new DefaultTableModel();
+          
+            model.addColumn("Codigo de Inventario");
+            model.addColumn("Nombre Producto");
+            model.addColumn("Cantidad");
+            model.addColumn("Precio");
+       
+        
+        
+          
+          
+        
+            while(rs.next()){
+                for(int i=0;i<4;i++)
+                    Datos[i]=rs.getObject(i+1);
+                 model.addRow(Datos);
+            }
+           
+            return model;
+        }
+        catch(SQLException e)
+        {
+            return null;
+        }
+      //  return model;
+    }
+    
+    
     
     
 }
