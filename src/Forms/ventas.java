@@ -10,13 +10,14 @@ import Datos.GenerarCodigo;
 import Datos.Ventas;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author eduardo
+ * @author Alex
  */
 public class ventas extends javax.swing.JFrame {
 
@@ -39,6 +40,7 @@ public class ventas extends javax.swing.JFrame {
             modelo3.addColumn("precio * cantidad");
         cargarcodigo();
         mostrar();
+        verClientes();
     }
 
     /**
@@ -75,11 +77,10 @@ public class ventas extends javax.swing.JFrame {
         txtBuscar = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
-        jLabel6 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         txt_total4 = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(960, 600));
@@ -147,7 +148,7 @@ public class ventas extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btn_nuevo);
-        btn_nuevo.setBounds(820, 140, 120, 50);
+        btn_nuevo.setBounds(830, 140, 120, 50);
 
         btn_cancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/cancelar.png"))); // NOI18N
         btn_cancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -245,15 +246,7 @@ public class ventas extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTable2);
 
         getContentPane().add(jScrollPane2);
-        jScrollPane2.setBounds(20, 110, 790, 100);
-
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/W4.png"))); // NOI18N
-        jLabel6.setToolTipText("");
-        jLabel6.setMaximumSize(new java.awt.Dimension(960, 570));
-        jLabel6.setMinimumSize(new java.awt.Dimension(960, 570));
-        jLabel6.setPreferredSize(new java.awt.Dimension(960, 570));
-        getContentPane().add(jLabel6);
-        jLabel6.setBounds(0, 0, 970, 670);
+        jScrollPane2.setBounds(20, 110, 800, 100);
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
@@ -265,19 +258,33 @@ public class ventas extends javax.swing.JFrame {
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Cliente:");
         getContentPane().add(jLabel7);
-        jLabel7.setBounds(440, 30, 46, 15);
-
-        jLabel8.setText("jLabel8");
-        getContentPane().add(jLabel8);
-        jLabel8.setBounds(440, 20, 60, 20);
+        jLabel7.setBounds(450, 30, 46, 15);
         getContentPane().add(txt_total4);
-        txt_total4.setBounds(450, 510, 153, 30);
+        txt_total4.setBounds(290, 540, 153, 30);
+
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/W4.png"))); // NOI18N
+        jLabel6.setToolTipText("");
+        jLabel6.setMaximumSize(new java.awt.Dimension(960, 570));
+        jLabel6.setMinimumSize(new java.awt.Dimension(960, 570));
+        jLabel6.setPreferredSize(new java.awt.Dimension(960, 570));
+        getContentPane().add(jLabel6);
+        jLabel6.setBounds(0, 0, 970, 670);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelarActionPerformed
         // TODO add your handling code here:
+        
+         int fsel; 
+        fsel=jTable1.getSelectedRow();
+        double importe, total1;
+        importe=Double.parseDouble(jTable1.getValueAt(fsel,3).toString());
+       total1=Double.parseDouble(txt_total.getText()) - importe;
+           
+        txt_total.setText(""+total1);
+    txt_sub_total.setText(""+ total1);
+        modelo3.removeRow(fsel) ;  
     }//GEN-LAST:event_btn_cancelarActionPerformed
 
     private void btn_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editarActionPerformed
@@ -466,6 +473,28 @@ public class ventas extends javax.swing.JFrame {
         
         
     }
+      
+      
+        public void verClientes(){
+        
+        
+//        conexion conec = new conexion();
+//        Connection cn=conec.conectar();
+        String consulta="select IDCLIENTE,NOMCLIENTE,APELLCLIENTE from clientes order by IDCLIENTE";
+        String grados;
+        cb_cliente.removeAllItems();
+        try {
+            Statement sql=(Statement) cn.createStatement();
+            ResultSet rsgrados=sql.executeQuery(consulta);
+            while (rsgrados.next()) { 
+               cb_cliente.addItem((String) rsgrados.getString("IDCLIENTE") + "-"+ rsgrados.getString("NOMCLIENTE")+" "+rsgrados.getString("APELLCLIENTE"));
+            }
+            cn.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,"Error sql, no puede leer los datos: " +e.getMessage().toString());
+        }
+    }
+       
     
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
         // TODO add your handling code here:
@@ -536,7 +565,6 @@ public class ventas extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

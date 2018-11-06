@@ -27,11 +27,15 @@ public class Empleados extends javax.swing.JFrame {
      DateFormat formatoFecha;
      public Date date = null;
      public int idPA=-1;
-     public int usuarioPA =-1;
+     public int idPA2=-1;
+     public int bandera =-1;
      public int duiPA =-1;
      String fecha ;
      public boolean mostrarP=false;
-     public String sql="select * from empleados order by  empleados.idestado desc,empleados.nombre asc";
+     public String sql="select ee.EMP_ID,ee.EMP_NOMBRE,ee.EMP_APELLIDO,uu.usuario_nom,uu.usuario_contra,"
+             + "cc.idtipousuario,ee.SALARIO,ee.EMP_TELEFONO,ee.EMP_DUI,ee.FECHAINGRESO,ee.CARGO_ID,ee.ESTADO "
+             + "from VentasSport.empleado ee join VentasSport.usuarios uu on ee.usuario_id=uu.usuario_id "
+             + "join VentasSport.cargos cc on ee.cargo_id=cc.idtipousuario order by ee.estado desc,ee.emp_nombre asc";
      public int UsuarioSel =0;
     //Para establecer el modelo al JTable
     DefaultTableModel modelo = new DefaultTableModel();
@@ -49,14 +53,12 @@ public class Empleados extends javax.swing.JFrame {
         Popup = new javax.swing.JPopupMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
         grupoRBT = new javax.swing.ButtonGroup();
         GroupRBTFecha = new javax.swing.ButtonGroup();
         PanelEmp = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -67,7 +69,6 @@ public class Empleados extends javax.swing.JFrame {
         txt_nombre = new javax.swing.JTextField();
         txt_apellido = new javax.swing.JTextField();
         txt_dui = new javax.swing.JTextField();
-        txt_direc = new javax.swing.JTextField();
         txt_tel = new javax.swing.JTextField();
         txt_usuario = new javax.swing.JTextField();
         btn_guardar = new javax.swing.JButton();
@@ -106,21 +107,8 @@ public class Empleados extends javax.swing.JFrame {
         });
         Popup.add(jMenuItem1);
 
-        jMenuItem2.setText("Eliminar");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
-            }
-        });
+        jMenuItem2.setText("ver empleado");
         Popup.add(jMenuItem2);
-
-        jMenuItem3.setText("ver");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
-            }
-        });
-        Popup.add(jMenuItem3);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(1300, 760));
@@ -137,8 +125,6 @@ public class Empleados extends javax.swing.JFrame {
         jLabel2.setText("Apellido:");
 
         jLabel3.setText("DUI:");
-
-        jLabel4.setText("Direccion:");
 
         jLabel5.setText("Telefono:");
 
@@ -187,12 +173,6 @@ public class Empleados extends javax.swing.JFrame {
         txt_dui.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txt_duiKeyTyped(evt);
-            }
-        });
-
-        txt_direc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_direcActionPerformed(evt);
             }
         });
 
@@ -273,7 +253,7 @@ public class Empleados extends javax.swing.JFrame {
 
         jLabel9.setText("fecha de ingreso :");
 
-        DCCalendario.setDateFormatString("yyyy-MM-dd");
+        DCCalendario.setDateFormatString("dd-MM-yyyy");
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/mostrar.png"))); // NOI18N
         jButton2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -283,8 +263,6 @@ public class Empleados extends javax.swing.JFrame {
             }
         });
 
-        TxtContraseña.setText("jPasswordField1");
-
         javax.swing.GroupLayout PanelEmpLayout = new javax.swing.GroupLayout(PanelEmp);
         PanelEmp.setLayout(PanelEmpLayout);
         PanelEmpLayout.setHorizontalGroup(
@@ -292,48 +270,8 @@ public class Empleados extends javax.swing.JFrame {
             .addGroup(PanelEmpLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(PanelEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
                     .addGroup(PanelEmpLayout.createSequentialGroup()
-                        .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cb_estado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(PanelEmpLayout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cb_cargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(PanelEmpLayout.createSequentialGroup()
-                        .addComponent(btn_editar)
-                        .addGap(10, 10, 10)
                         .addGroup(PanelEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btn_cancelar)
-                            .addComponent(btn_guardar)))
-                    .addComponent(DCCalendario, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(PanelEmpLayout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addGroup(PanelEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel9)
-                            .addGroup(PanelEmpLayout.createSequentialGroup()
-                                .addComponent(RBTPorSis)
-                                .addGap(18, 18, 18)
-                                .addComponent(RBTManual))
-                            .addComponent(jLabel15)
-                            .addGroup(PanelEmpLayout.createSequentialGroup()
-                                .addComponent(jLabel14)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(TxtSalario, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(PanelEmpLayout.createSequentialGroup()
-                        .addGap(13, 13, 13)
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(TxtContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(PanelEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(PanelEmpLayout.createSequentialGroup()
-                            .addComponent(jLabel3)
-                            .addGap(18, 18, 18)
-                            .addComponent(txt_dui, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(PanelEmpLayout.createSequentialGroup()
                             .addGroup(PanelEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelEmpLayout.createSequentialGroup()
                                     .addComponent(jLabel1)
@@ -341,21 +279,59 @@ public class Empleados extends javax.swing.JFrame {
                                 .addGroup(PanelEmpLayout.createSequentialGroup()
                                     .addComponent(jLabel2)
                                     .addGap(8, 8, 8)))
-                            .addGroup(PanelEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txt_apellido)
-                                .addComponent(txt_nombre, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE))))
-                    .addGroup(PanelEmpLayout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txt_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(PanelEmpLayout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(PanelEmpLayout.createSequentialGroup()
+                                .addGroup(PanelEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel5)
+                                    .addGroup(PanelEmpLayout.createSequentialGroup()
+                                        .addGap(6, 6, 6)
+                                        .addComponent(jLabel7)))
+                                .addGap(5, 5, 5)))
                         .addGroup(PanelEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txt_tel, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txt_direc, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(26, 26, Short.MAX_VALUE))
+                            .addComponent(txt_usuario)
+                            .addComponent(txt_tel)
+                            .addComponent(txt_dui)
+                            .addComponent(txt_nombre)
+                            .addComponent(txt_apellido, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addGroup(PanelEmpLayout.createSequentialGroup()
+                        .addGroup(PanelEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(PanelEmpLayout.createSequentialGroup()
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cb_estado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(PanelEmpLayout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cb_cargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(PanelEmpLayout.createSequentialGroup()
+                                .addComponent(btn_editar)
+                                .addGap(10, 10, 10)
+                                .addGroup(PanelEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btn_cancelar)
+                                    .addComponent(btn_guardar)))
+                            .addComponent(DCCalendario, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(PanelEmpLayout.createSequentialGroup()
+                                .addGap(11, 11, 11)
+                                .addGroup(PanelEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel9)
+                                    .addGroup(PanelEmpLayout.createSequentialGroup()
+                                        .addComponent(RBTPorSis)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(RBTManual))
+                                    .addComponent(jLabel15)
+                                    .addGroup(PanelEmpLayout.createSequentialGroup()
+                                        .addComponent(jLabel14)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(TxtSalario, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(PanelEmpLayout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(TxtContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         PanelEmpLayout.setVerticalGroup(
             PanelEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -374,10 +350,6 @@ public class Empleados extends javax.swing.JFrame {
                     .addComponent(txt_dui, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PanelEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(txt_direc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(PanelEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(txt_tel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(6, 6, 6)
@@ -385,15 +357,12 @@ public class Empleados extends javax.swing.JFrame {
                     .addComponent(txt_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
                 .addGap(25, 25, 25)
-                .addGroup(PanelEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(PanelEmpLayout.createSequentialGroup()
-                        .addGroup(PanelEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(TxtContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(29, 29, 29))
-                    .addGroup(PanelEmpLayout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)))
+                .addGroup(PanelEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PanelEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel8)
+                        .addComponent(TxtContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(PanelEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
                     .addComponent(TxtSalario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -405,9 +374,9 @@ public class Empleados extends javax.swing.JFrame {
                     .addComponent(RBTManual))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel15)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(DCCalendario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
+                .addGap(32, 32, 32)
                 .addGroup(PanelEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel10)
                     .addComponent(cb_estado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -461,6 +430,11 @@ public class Empleados extends javax.swing.JFrame {
         txt_buscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_buscarActionPerformed(evt);
+            }
+        });
+        txt_buscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_buscarKeyTyped(evt);
             }
         });
 
@@ -564,29 +538,28 @@ public class Empleados extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 void tbEmp(String SQL){
-            String []titulos={"ID","NOMBRE","APELLIDO","DUI","DIRECCION","TELEFONO"
-                    ,"USUARIO","CLAVE","SALARIO","INGRESO","ESTADO","CARGO"};//CREANDO UN STRING PARA LO TITULOS 
+            String []titulos={"ID","NOMBRE","APELLIDO","USUARIO","CONTRASEÑA","TIPO"
+                    ,"SALARIO","TELEFONO","DUI","INGRESO","CARGO","ESTADO"};//CREANDO UN STRING PARA LO TITULOS 
             String []Registros=new String[12];
            modelo= new DefaultTableModel(null,titulos);//ASIGNAR LA MATRIZ TITUTLO A NUESTRO MODELO DEL JTABLE
             try{          //
             rs=Conexion.Consulta(rs,SQL);//LLAMAMA AL METODO EnEst, EJECTURA UNA CONSULTA A LA TABLA JTBEMP
              while(rs.next())//RECORRER LA CONSULTA COLUMNA POR COLUMNA
               {
-                 //EXTRAER LOS CAMPOS DE LA BASE DE DATOS Y ASIGNARLOS A LA COLUMNAS DE LA TABLA
-                 Registros[0]= rs.getString("IDEMPLEADO");
-                 Registros[1]= rs.getString("NOMBRE");
-                 Registros[2]= rs.getString("APELLIDO");
-                 Registros[3]= rs.getString("DUI");
-                 Registros[4]= rs.getString("DIRECCION");
-                 Registros[5]= rs.getString("TELEFONO");
-                 Registros[6]= rs.getString("USUARIO");
-                 Registros[7]= rs.getString("CLAVE");
-                 Registros[8]= rs.getString("SALARIO");
-                 Registros[9]= rs.getString("FECHAINGRESO");
-                 Registros[10]= rs.getString("IDESTADO");
-                 Registros[11]= rs.getString("IDCARGO");
+                Registros[0]= rs.getString("emp_id");
+                 Registros[1]= rs.getString("emp_nombre");
+                 Registros[2]= rs.getString("emp_apellido");
+                 Registros[3]= rs.getString("usuario_nom");
+                 Registros[4]= rs.getString("usuario_contra");
+                 Registros[5]= rs.getString("idtipousuario");
+                 Registros[6]= rs.getString("salario");
+                 Registros[7]= rs.getString("emp_telefono");
+                 Registros[8]= rs.getString("emp_dui");
+                 Registros[9]= rs.getString("fechaingreso");
+                 Registros[10]= rs.getString("cargo_id");
+                 Registros[11]= rs.getString("estado");
                  //AÑADIR LAS COLUMNAS AL MODELO JTABLE
-                 ColorT renderizado = new ColorT(10);
+                 ColorT renderizado = new ColorT(11);
                  this.JTBEmp.setDefaultRenderer(Object.class, renderizado);
                  modelo.addRow(Registros);
               }
@@ -605,18 +578,18 @@ public boolean validarcampos(){
         fecha = formatoFecha.format(fechaActual);
     }
     else if ((this.RBTManual.isSelected())&&(this.DCCalendario.getDate()!=null)){
-        fecha = String.valueOf(this.DCCalendario.getDate());
+        fecha = String.valueOf(formatoFecha.format(this.DCCalendario.getDate()));
     }
     else if ((this.RBTManual.isSelected())&&(this.DCCalendario.getDate()==null)){
         fecha =null;
     }
     if((this.txt_nombre.getText().length()!=0)&&(this.txt_apellido.getText().length()!=0)&&(this.txt_dui.getText().length()!=0)&&
-                (this.txt_tel.getText().length()!=0)&&(this.txt_direc.getText().length()!=0)&&(this.TxtSalario.getText().length()!=0)&&
+                (this.txt_tel.getText().length()!=0)&&(this.TxtSalario.getText().length()!=0)&&
                 (String.copyValueOf(this.TxtContraseña.getPassword()).length()!=0)&&(this.txt_usuario.getText().length()!=0)&&(fecha!=null)){
         validar = true;
     }
        else if((this.txt_nombre.getText().length()==0)||(this.txt_apellido.getText().length()==0)||(this.txt_dui.getText().length()==0)||
-                (this.txt_tel.getText().length()==0)||(this.txt_direc.getText().length()==0)||(this.TxtSalario.getText().length()==0)||
+                (this.txt_tel.getText().length()==0)||(this.TxtSalario.getText().length()==0)||
                 (String.copyValueOf(this.TxtContraseña.getPassword()).length()==0)||(this.txt_usuario.getText().length()==0)||
                 (fecha==null)){
         validar =false;
@@ -625,7 +598,6 @@ public boolean validarcampos(){
 }
 void llenar(){
 int fila = this.JTBEmp.getSelectedRow();//VARIABLE TIPO INT PARA OBTENER LOS DATOS DE JTABLE
-        //"ID","NOMBER","APELLIDO","TELEFONO","DIRECCION","CARGO" ,"INGRESO","CLAVE","DUI","ESTADO","SALARIO","USUARIO"
         String nombre="",apellido="",telefono="",direccion="",ingreso="",clave="",dui="",salario="",usuario="";//VARIABLES STRING
         int cargo=-1,estado=-1;
         //OBTENER LOS VALORES DE JTABLE
@@ -633,30 +605,29 @@ int fila = this.JTBEmp.getSelectedRow();//VARIABLE TIPO INT PARA OBTENER LOS DAT
             UsuarioSel=Integer.parseInt(JTBEmp.getValueAt(fila,0).toString());
             nombre=JTBEmp.getValueAt(fila,1).toString();
             apellido=JTBEmp.getValueAt(fila,2).toString();
-            dui=JTBEmp.getValueAt(fila,3).toString();
-            direccion=JTBEmp.getValueAt(fila,4).toString();
-            telefono=JTBEmp.getValueAt(fila,5).toString();
-            usuario=JTBEmp.getValueAt(fila,6).toString();
-            clave=JTBEmp.getValueAt(fila,7).toString();
-            salario=JTBEmp.getValueAt(fila,8).toString();
+            usuario=JTBEmp.getValueAt(fila,3).toString();
+            clave=JTBEmp.getValueAt(fila,4).toString();
+            salario=JTBEmp.getValueAt(fila,6).toString();
+            telefono=JTBEmp.getValueAt(fila,7).toString();
+            dui=JTBEmp.getValueAt(fila,8).toString();
             ingreso=JTBEmp.getValueAt(fila,9).toString();
             try {
             date = new SimpleDateFormat("yyy-MM-dd").parse((String)modelo.getValueAt(fila,9));
             } catch (ParseException ex) {
             Logger.getLogger(Empleados.class.getName()).log(Level.SEVERE, null, ex);
             }
-            estado=Integer.parseInt(JTBEmp.getValueAt(fila,10).toString());
-            cargo=Integer.parseInt(JTBEmp.getValueAt(fila,11).toString());
+            cargo=Integer.parseInt(JTBEmp.getValueAt(fila,10).toString());
+            estado=Integer.parseInt(JTBEmp.getValueAt(fila,11).toString());
          }
          //ASIGNAR LOS VALORES OBTENIDO A LAS VARIABLES STRING
          this.txt_nombre.setText(nombre);
          this.txt_apellido.setText(apellido);
          this.txt_dui.setText(dui);
-         this.txt_direc.setText(direccion);
          this.txt_tel.setText(telefono);
          this.txt_usuario.setText(usuario);
          this.TxtContraseña.setText(clave);
-         this.DCCalendario.setDate(date);                                             
+         this.RBTManual.setSelected(true);
+         this.DCCalendario.setDate(date);   
          this.TxtSalario.setText(salario);
          this.btn_editar.setEnabled(true);//BOTON MODIFICAR HABILITADO
          this.btn_guardar.setEnabled(false);     
@@ -687,7 +658,6 @@ void limpiar(){
         this.txt_dui.setText(null);
         this.txt_tel.setText(null);
         this.txt_usuario.setText(null);
-        this.txt_direc.setText(null);
         this.DCCalendario.setDate(null);
         this.txt_dui.setText(null);
         this.TxtSalario.setText(null);
@@ -706,46 +676,100 @@ for(int i=0;i<this.PanelEmp.getComponents().length;i++) {
         }
 }
 void VInsercionEmp(){
-//    si manda 0(usuario) 0(dui) el empleado a sido ingresado
-//    si manda 1(usuario) 1(dui) el usuario ya esta en uso 
-//    si manda 0(usuario) 1(dui) dui ya contenido en los registros
-    if ((usuarioPA==0)&&(duiPA==0)) {
+//IF((MDUI=0)AND(MBANDERA=1)AND(MIDUSER!=-2)){
+//MSJ="INSERTADO"
+//}
+//ELSE IF((MIDUSER=-2)AND(MDUI=1)AND(MBANDERA=0)){
+//MSJ="NO SE INSERTO dui o usuario ya en registro"
+//}
+    if ((bandera==1)&&(duiPA==0)&&(idPA2!=-2)) {
         JOptionPane.showMessageDialog(null, "Registro exitoso","Registro",JOptionPane.INFORMATION_MESSAGE);
         tbEmp(sql);
-        usuarioPA=-1;
+        bandera=-1;
         duiPA=-1;
+        idPA2=-1;
     }
-    if ((usuarioPA==1)&&(duiPA==1)) {
+    if ((bandera==0)&&(duiPA==1)&&(idPA2==-2)) {
         JOptionPane.showMessageDialog(null, "Campo 'usuario' ya esta registrado por favor modifiquelo","Registro",JOptionPane.INFORMATION_MESSAGE);
-        usuarioPA=-1;
+        bandera=-1;
         duiPA=-1;
+        idPA2=-1;
     }
-    if (usuarioPA==0 && duiPA==1) {
-        JOptionPane.showMessageDialog(null, "Dui ya contenido en los registros","Registro",JOptionPane.INFORMATION_MESSAGE);
-        usuarioPA=-1;
-        duiPA=-1;
-    }
+}
+void validarPNuevo(){
+        habilitar();
+        limpiar();
+        if (this.RBTPorSis.isSelected()) {
+            this.DCCalendario.setEnabled(false);
+        }
+        this.btn_editar.setEnabled(false);
+        this.cb_cargo.removeAllItems();
+        this.cb_cargo.addItem("administrador");
+        this.cb_cargo.addItem("vendedor");
+        this.cb_estado.removeAllItems();
+        this.cb_estado.addItem("activo");
+        this.cb_estado.addItem("inactivo");
+}
+void busqueda(){
+        //busqueda total(con activos e inactivos) sin campo de busqueda
+        if ((this.rb_nombre.isSelected()==true)&&(this.txt_buscar.getText().trim().length()==0)) {
+            tbEmp(sql);
+        }
+        if ((this.rb_apellido.isSelected()==true)&&(this.txt_buscar.getText().trim().length()==0)) {
+            tbEmp(sql);
+        }
+        if ((this.rb_usuario.isSelected()==true)&&(this.txt_buscar.getText().trim().length()==0)) {
+            tbEmp(sql);
+        }
+        //busqueda total(con activos e inactivos) con cualquier opcion(nombre, apellido, usuario)
+        if ((this.txt_buscar.getText().trim().length()>0)&&(this.rb_nombre.isSelected()==true)) {
+           String sql= "select ee.EMP_ID,ee.EMP_NOMBRE,ee.EMP_APELLIDO,uu.usuario_nom,uu.usuario_contra,"
+             + "cc.idtipousuario,ee.SALARIO,ee.EMP_TELEFONO,ee.EMP_DUI,ee.FECHAINGRESO,ee.CARGO_ID,ee.ESTADO "
+             + "from VentasSport.empleado ee join VentasSport.usuarios uu on ee.usuario_id=uu.usuario_id "
+             + "join VentasSport.cargos cc on ee.cargo_id=cc.idtipousuario "
+             + "where regexp_like"+""+" (ee.emp_nombre,'"+this.txt_buscar.getText().trim()+"','i')"
+                   + " order by ee.estado desc,ee.emp_nombre asc";
+            tbEmp(sql);
+        }
+        if ((this.txt_buscar.getText().trim().length()>0)&&(this.rb_apellido.isSelected()==true)) {
+            String sql="select ee.EMP_ID,ee.EMP_NOMBRE,ee.EMP_APELLIDO,uu.usuario_nom,uu.usuario_contra,"
+             + "cc.idtipousuario,ee.SALARIO,ee.EMP_TELEFONO,ee.EMP_DUI,ee.FECHAINGRESO,ee.CARGO_ID,ee.ESTADO "
+             + "from VentasSport.empleado ee join VentasSport.usuarios uu on ee.usuario_id=uu.usuario_id "
+             + "join VentasSport.cargos cc on ee.cargo_id=cc.idtipousuario "
+             + "where regexp_like(ee.emp_apellido,'"+this.txt_buscar.getText().trim()+"','i') "
+            + " order by ee.estado desc,ee.emp_nombre asc";
+            tbEmp(sql);
+        }
+        if ((this.txt_buscar.getText().trim().length()>0)&&(this.rb_usuario.isSelected()==true)) {
+            String sql="select ee.EMP_ID,ee.EMP_NOMBRE,ee.EMP_APELLIDO,uu.usuario_nom,uu.usuario_contra,"
+             + "cc.idtipousuario,ee.SALARIO,ee.EMP_TELEFONO,ee.EMP_DUI,ee.FECHAINGRESO,ee.CARGO_ID,ee.ESTADO "
+             + "from VentasSport.empleado ee join VentasSport.usuarios uu on ee.usuario_id=uu.usuario_id "
+             + "join VentasSport.cargos cc on ee.cargo_id=cc.idtipousuario "
+             + "where regexp_like (uu.usuario_nom,'"+this.txt_buscar.getText().trim()+"','i') "
+            + " order by ee.estado desc,ee.emp_nombre asc";
+            tbEmp(sql);
+        }
 }
 void VActualizacionEmp(){
 //si idPA=1; usuarioPA=0; duiPA=0 se actualiza el usuario
 //si idPA=1; usuarioPA=1; duiPA=1 el campo usuario o dui ya estan en registro
 //si idPA=0; usuarioPA=0; duiPA=0 el usuario no se encontro por algun motivo
-    if ((idPA==1)&&(usuarioPA==0)&&(duiPA==0)) {
+    if ((idPA==1)&&(bandera==0)&&(duiPA==0)) {
         JOptionPane.showMessageDialog(null, "Actualizacion exitosa","Modificacion",JOptionPane.INFORMATION_MESSAGE);
         tbEmp(sql);
-        usuarioPA=-1;
+        bandera=-1;
         duiPA=-1;
         idPA=-1;
     }
-    if ((idPA==1)&&(usuarioPA==1)&&(duiPA==1)) {
+    if ((idPA==1)&&(bandera==1)&&(duiPA==1)) {
         JOptionPane.showMessageDialog(null, "Campos 'usuario' o 'dui' ya estan en registro por favor modifiquelos","Modificacion",JOptionPane.INFORMATION_MESSAGE);
-        usuarioPA=-1;
+        bandera=-1;
         duiPA=-1;
         idPA=-1;
     }
-    if ((idPA==0)&&(usuarioPA==0)&&(duiPA==0)) {
+    if ((idPA==0)&&(bandera==0)&&(duiPA==0)) {
         JOptionPane.showMessageDialog(null, "por algun motivo el empleado no se encuentra en los registros","Modificacion",JOptionPane.INFORMATION_MESSAGE);
-        usuarioPA=-1;
+        bandera=-1;
         duiPA=-1;
         idPA=-1;
     }
@@ -790,10 +814,6 @@ void VActualizacionEmp(){
         }
     }//GEN-LAST:event_txt_duiKeyTyped
 
-    private void txt_direcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_direcActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_direcActionPerformed
-
     private void txt_telActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_telActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_telActionPerformed
@@ -809,7 +829,9 @@ void VActualizacionEmp(){
     }//GEN-LAST:event_txt_usuarioActionPerformed
 
     private void btn_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_guardarActionPerformed
-        validarcampos();
+        int usuario=-1;
+        int contra=-1;
+        int id=-1;
         if (validarcampos()==true) {
             int estado=0,cargo=0;
             if (this.cb_estado.getSelectedIndex()==0) {
@@ -825,26 +847,51 @@ void VActualizacionEmp(){
                 cargo=2;
             }
             try{
+                conn=Conexion.conectar(conn);
+                String sql="{call insertusuario(?,?,?,?,?)}";
+                CallableStatement pst=conn.prepareCall(sql);
+                pst.setString(1,this.txt_usuario.getText());
+                pst.setString(2,String.valueOf(this.TxtContraseña.getPassword()));
+                pst.registerOutParameter(3, java.sql.Types.NUMERIC);
+                pst.registerOutParameter(4, java.sql.Types.NUMERIC);
+                pst.registerOutParameter(5, java.sql.Types.NUMERIC);
+                pst.execute();
+                usuario = pst.getInt(3);
+                contra = pst.getInt(4);
+                id = pst.getInt(5);
+            }catch(Exception e){
+                System.out.println(e.getCause());//OBTENER ERROR
+            }finally{
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    System.out.println("Error: " + ex.getMessage());
+                }
+            }
+            try{
                 conn=Conexion.conectar(conn);//INVOCANDO LA CONEXION DESDE LA CLASE main
-                String sql="{call insertemp(?,?,?,?,?,?,?,?,?,?,?,?,?)}";//QUERY
+                String sql="{call insertemp(?,?,?,?,?,?,?,?,?,?,?,?)}";//QUERY
                 CallableStatement pst=conn.prepareCall(sql);//EJECUCION DE QUERY POR MEDIO DE STATEMENT
+//                pnombre in varchar2,papellido in varchar2,ptelefono in char,pcargo in number,
+//                pusuarioid in number,estado in number,pdui in varchar2,pfechaingreso in date,
+//                psalario in float,mdui out number,mbandera out number,miduser out number
                 //ASIGANAR DE VARIABLES A LOS PARAMETROS DE QUERY
                 pst.setString(1, this.txt_nombre.getText());
                 pst.setString(2, this.txt_apellido.getText());
                 pst.setString(3,this.txt_tel.getText());
-                pst.setString(4,this.txt_direc.getText());
-                pst.setInt(5,cargo);
-                pst.setString(6,fecha);
-                pst.setString(7,String.valueOf(this.TxtContraseña.getPassword()));
-                pst.setString(8,this.txt_dui.getText());
-                pst.setInt(9,estado);
-                pst.setDouble(10,Double.parseDouble(this.TxtSalario.getText()));
-                pst.setString(11,this.txt_usuario.getText());
+                pst.setInt(4,cargo);
+                pst.setInt(5,id);
+                pst.setInt(6,estado);
+                pst.setString(7,this.txt_dui.getText());
+                pst.setString(8,fecha);
+                pst.setDouble(9,Double.parseDouble(this.TxtSalario.getText()));
+                pst.registerOutParameter(10, java.sql.Types.NUMERIC);
+                pst.registerOutParameter(11, java.sql.Types.NUMERIC);
                 pst.registerOutParameter(12, java.sql.Types.NUMERIC);
-                pst.registerOutParameter(13, java.sql.Types.NUMERIC);
                 pst.execute();//EJECUTAR
-                usuarioPA = Integer.parseInt(pst.getString(12));
-                duiPA = Integer.parseInt(pst.getString(13));
+                duiPA = pst.getInt(10);
+                bandera = pst.getInt(11);
+                idPA2 = pst.getInt(12);
             }catch(Exception e){
                 System.out.println(e.getCause());//OBTENER ERROR
             }finally {
@@ -879,32 +926,28 @@ void VActualizacionEmp(){
             }
             try{
                 conn=Conexion.conectar(conn);//INVOCANDO LA CONEXION DESDE LA CLASE main
-                String sql="{call actualizarEmp(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";//QUERY
-                CallableStatement pst=conn.prepareCall(sql);//EJECUCION DE QUERY POR MEDIO DE STATEMENT
+                String sql1="{call actualizaremp(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";//QUERY
+                CallableStatement pst=conn.prepareCall(sql1);//EJECUCION DE QUERY POR MEDIO DE STATEMENT
                 //ASIGANAR DE VARIABLES A LOS PARAMETROS DE QUERY
-                //                 pnombre in varchar2,papellido in varchar2,pdui in varchar,pdireccion varchar2,
-                //                           ptelefono in varchar2,pusuario in varchar2,pclave in varchar2,psalario in double PRECISION,
-                //                           pfechaingreso in date,pestado in number,pcargo in number,pid in number,mid out number
-                //                           ,musuario out number,mdui out number
                 pst.setString(1, this.txt_nombre.getText());
                 pst.setString(2, this.txt_apellido.getText());
                 pst.setString(3,this.txt_dui.getText());
-                pst.setString(4,this.txt_direc.getText());
-                pst.setString(5,this.txt_tel.getText());
-                pst.setString(6,this.txt_usuario.getText());
-                pst.setString(7,String.valueOf(this.TxtContraseña.getPassword()));
-                pst.setDouble(8,Double.parseDouble(this.TxtSalario.getText()));
-                pst.setString(9,fecha);
-                pst.setInt(10,estado);
-                pst.setInt(11,cargo);
-                pst.setInt(12,UsuarioSel);
+
+                pst.setString(4,this.txt_tel.getText());
+                pst.setString(5,this.txt_usuario.getText());
+                pst.setString(6,String.valueOf(this.TxtContraseña.getPassword()));
+                pst.setDouble(7,Double.parseDouble(this.TxtSalario.getText()));
+                pst.setString(8,fecha);
+                pst.setInt(9,estado);
+                pst.setInt(10,cargo);
+                pst.setInt(11,UsuarioSel);
+                pst.registerOutParameter(12, java.sql.Types.NUMERIC);
                 pst.registerOutParameter(13, java.sql.Types.NUMERIC);
                 pst.registerOutParameter(14, java.sql.Types.NUMERIC);
-                pst.registerOutParameter(15, java.sql.Types.NUMERIC);
                 pst.execute();//EJECUTAR
-                idPA = Integer.parseInt(pst.getString(13));
-                usuarioPA = Integer.parseInt(pst.getString(14));
-                duiPA = Integer.parseInt(pst.getString(15));
+                idPA = Integer.parseInt(pst.getString(12));
+                bandera = Integer.parseInt(pst.getString(13));
+                duiPA = Integer.parseInt(pst.getString(14));
             }catch(Exception e){
                 System.out.println(e.getCause());//OBTENER ERROR
             }finally {
@@ -915,6 +958,8 @@ void VActualizacionEmp(){
                 }
             }
             VActualizacionEmp();
+            estado=0;
+            cargo=0;
         }
         else if(validarcampos()==false){
             JOptionPane.showMessageDialog(null, "Algun campo esta vacio","Registro",JOptionPane.INFORMATION_MESSAGE);
@@ -977,33 +1022,7 @@ void VActualizacionEmp(){
     }//GEN-LAST:event_rb_nombreActionPerformed
 
     private void btn_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_buscarActionPerformed
-        //busqueda total(con activos e inactivos) sin campo de busqueda
-        if ((this.rb_nombre.isSelected()==true)&&(this.txt_buscar.getText().trim().length()==0)) {
-            tbEmp(sql);
-        }
-        if ((this.rb_apellido.isSelected()==true)&&(this.txt_buscar.getText().trim().length()==0)) {
-            tbEmp(sql);
-        }
-        if ((this.rb_usuario.isSelected()==true)&&(this.txt_buscar.getText().trim().length()==0)) {
-            tbEmp(sql);
-        }
-        //busqueda total(con activos e inactivos) con cualquier opcion(nombre, apellido, usuario)
-        if ((this.txt_buscar.getText().trim().length()>0)&&(this.rb_nombre.isSelected()==true)) {
-            //SELECT * from informaticos.empleados ee where regexp_like (ee.nombre,'byron','i') order by ee.idestado;
-            String sql="select * from informaticos.empleados ee where regexp_like (ee.nombre,'"+this.txt_buscar.getText().trim()+"','i') "
-            + "order by ee.idestado,ee.nombre,ee.apellido asc";
-            tbEmp(sql);
-        }
-        if ((this.txt_buscar.getText().trim().length()>0)&&(this.rb_apellido.isSelected()==true)) {
-            String sql="select * from informaticos.empleados ee where regexp_like (ee.apellido,'"+this.txt_buscar.getText().trim()+"','i') "
-            + "order by ee.idestado,ee.nombre,ee.apellido asc";
-            tbEmp(sql);
-        }
-        if ((this.txt_buscar.getText().trim().length()>0)&&(this.rb_usuario.isSelected()==true)) {
-            String sql="select * from informaticos.empleados ee where ee.usuario like"+"'"+this.txt_buscar.getText().trim()+"%' "
-            + "order by ee.idestado,ee.nombre,ee.apellido desc";
-            tbEmp(sql);
-        }
+        busqueda();
     }//GEN-LAST:event_btn_buscarActionPerformed
 
     private void txt_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_buscarActionPerformed
@@ -1011,54 +1030,81 @@ void VActualizacionEmp(){
     }//GEN-LAST:event_txt_buscarActionPerformed
 
     private void btn_nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_nuevoActionPerformed
-        habilitar();
-        limpiar();
-        if (this.RBTPorSis.isSelected()) {
-            this.DCCalendario.setEnabled(false);
+        if((this.txt_nombre.getText().length()!=0)||(this.txt_apellido.getText().length()!=0)||
+                (this.txt_dui.getText().length()!=0)||
+                (this.txt_tel.getText().length()!=0)||(this.TxtSalario.getText().length()!=0)||
+                (String.copyValueOf(this.TxtContraseña.getPassword()).length()!=0)||(this.txt_usuario.getText().length()!=0)||
+                (fecha!=null)){
+                    int r= JOptionPane.showConfirmDialog(null,"AVISO! si acepta perdera los datos digitados en los campos.¿desea continuar?","CONTINUAR!",JOptionPane.YES_NO_OPTION);
+            if(r==JOptionPane.YES_OPTION){
+                validarPNuevo();
+            }
+            else if(r==JOptionPane.NO_OPTION){
+                
+            }
+            else if(r==JOptionPane.CLOSED_OPTION){
+            
+            }
         }
-        this.btn_editar.setEnabled(false);
-        this.cb_cargo.removeAllItems();
-        this.cb_cargo.addItem("administrador");
-        this.cb_cargo.addItem("vendedor");
-        this.cb_estado.removeAllItems();
-        this.cb_estado.addItem("activo");
-        this.cb_estado.addItem("inactivo");
+        else{
+                validarPNuevo();
+        }
     }//GEN-LAST:event_btn_nuevoActionPerformed
 
     private void btn_salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_salirActionPerformed
-        this.dispose();
-        PrincipalAdmin from = new PrincipalAdmin();
-        from.setVisible(true);
+                    if((this.txt_nombre.getText().length()!=0)||(this.txt_apellido.getText().length()!=0)||
+                (this.txt_dui.getText().length()!=0)||
+                (this.txt_tel.getText().length()!=0)||(this.TxtSalario.getText().length()!=0)||
+                (String.copyValueOf(this.TxtContraseña.getPassword()).length()!=0)||(this.txt_usuario.getText().length()!=0)||
+                (fecha!=null)){
+                    int r= JOptionPane.showConfirmDialog(null,"AVISO! si acepta perdera los datos digitados en los campos.¿desea continuar?","CONTINUAR!",JOptionPane.YES_NO_OPTION);
+            if(r==JOptionPane.YES_OPTION){
+                  this.dispose();
+                  PrincipalAdmin from = new PrincipalAdmin();
+                  from.setVisible(true);
+            }
+            else if(r==JOptionPane.NO_OPTION){
+                
+            }
+            else if(r==JOptionPane.CLOSED_OPTION){
+            
+            }
+        }
+        else{
+             this.dispose();
+             PrincipalAdmin from = new PrincipalAdmin();
+             from.setVisible(true);   
+        }
+       
     }//GEN-LAST:event_btn_salirActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        habilitar();
-        llenar();
+             if((this.txt_nombre.getText().length()!=0)||(this.txt_apellido.getText().length()!=0)||
+                (this.txt_dui.getText().length()!=0)||
+                (this.txt_tel.getText().length()!=0)||(this.TxtSalario.getText().length()!=0)||
+                (String.copyValueOf(this.TxtContraseña.getPassword()).length()!=0)||(this.txt_usuario.getText().length()!=0)||
+                (fecha!=null)){
+                    int r= JOptionPane.showConfirmDialog(null,"AVISO! si acepta perdera los datos digitados en los campos.¿desea continuar?","CONTINUAR!",JOptionPane.YES_NO_OPTION);
+            if(r==JOptionPane.YES_OPTION){
+                 habilitar();
+                 llenar();
+            }
+            else if(r==JOptionPane.NO_OPTION){
+                
+            }
+            else if(r==JOptionPane.CLOSED_OPTION){
+            
+            }
+        }
+        else{
+             habilitar();
+             llenar();   
+        }   
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-//        int fila = this.JTBEmp.getSelectedRow();//VARIABLE TIPO INT PARA OBTENER LOS DATOS DE JTABLE
-//        //"ID","NOMBER","APELLIDO","TELEFONO","DIRECCION","CARGO" ,"INGRESO","CLAVE","DUI","ESTADO","SALARIO","USUARIO"
-//        int est=-1;
-//        //OBTENER LOS VALORES DE JTABLE
-//        if (fila>=0){
-//            UsuarioSel=Integer.parseInt(JTBEmp.getValueAt(fila,0).toString());
-//            est=Integer.parseInt(JTBEmp.getValueAt(fila,10).toString());
-//            if (est==0) {
-//                JOptionPane.showMessageDialog(null, "El empleado ya esta descativado","Eliminar",JOptionPane.INFORMATION_MESSAGE);
-//
-//            }
-//            else if(est==1){
-//                JOptionPane.showMessageDialog(null, "Empleado desactivado","Eliminar",JOptionPane.INFORMATION_MESSAGE);
-//            }
-//        }
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
-
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-
-        llenar();
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    private void txt_buscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_buscarKeyTyped
+    busqueda();
+    }//GEN-LAST:event_txt_buscarKeyTyped
 
     /**
      * @param args the command line arguments
@@ -1124,7 +1170,6 @@ void VActualizacionEmp(){
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -1132,7 +1177,6 @@ void VActualizacionEmp(){
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JRadioButton rb_apellido;
@@ -1140,7 +1184,6 @@ void VActualizacionEmp(){
     private javax.swing.JRadioButton rb_usuario;
     private javax.swing.JTextField txt_apellido;
     private javax.swing.JTextField txt_buscar;
-    private javax.swing.JTextField txt_direc;
     private javax.swing.JTextField txt_dui;
     private javax.swing.JTextField txt_nombre;
     private javax.swing.JTextField txt_tel;

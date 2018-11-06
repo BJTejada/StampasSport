@@ -54,7 +54,7 @@ public class LogIn extends javax.swing.JFrame {
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("INICIO DE SESION");
         getContentPane().add(jLabel5);
-        jLabel5.setBounds(110, 20, 156, 19);
+        jLabel5.setBounds(110, 20, 158, 24);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/User.png"))); // NOI18N
         getContentPane().add(jLabel1);
