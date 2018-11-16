@@ -123,6 +123,8 @@ public class LogIn extends javax.swing.JFrame {
 
     private void btn_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelarActionPerformed
            // TODO add your handling code here:
+           System.exit(0);
+           
     }//GEN-LAST:event_btn_cancelarActionPerformed
 
     private void TxtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtPasswordActionPerformed
@@ -164,7 +166,10 @@ public class LogIn extends javax.swing.JFrame {
             PrincipalAdmin form = new PrincipalAdmin();
             form.setVisible(true);
             
+            
+            
             JOptionPane.showMessageDialog(null, "acceso concedido","acceso",JOptionPane.INFORMATION_MESSAGE);
+             
         }
         if ((usuario==1)&&(clave==1)&&(estado==1)&&(cargo==2)) {
             Inicio_vendedor form = new Inicio_vendedor();

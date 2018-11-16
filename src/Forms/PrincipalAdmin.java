@@ -246,16 +246,18 @@ public class PrincipalAdmin extends javax.swing.JFrame {
         getContentPane().add(jPanel);
         jPanel.setBounds(120, 70, 790, 470);
 
+        btn_salir.setBackground(new java.awt.Color(0, 102, 255));
         btn_salir.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btn_salir.setForeground(new java.awt.Color(255, 255, 255));
         btn_salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/salida.png"))); // NOI18N
+        btn_salir.setText("Salir");
         btn_salir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_salirActionPerformed(evt);
             }
         });
         getContentPane().add(btn_salir);
-        btn_salir.setBounds(980, 10, 50, 60);
+        btn_salir.setBounds(920, 470, 110, 40);
 
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/W1.jpg"))); // NOI18N
         jLabel11.setMaximumSize(new java.awt.Dimension(1050, 570));
@@ -287,6 +289,9 @@ public class PrincipalAdmin extends javax.swing.JFrame {
 
     private void btn_reportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_reportesActionPerformed
         // TODO add your handling code here:
+        this.dispose();
+        Reporte from = new Reporte();
+        from.setVisible(true);
     }//GEN-LAST:event_btn_reportesActionPerformed
 
     private void btn_ventasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ventasActionPerformed

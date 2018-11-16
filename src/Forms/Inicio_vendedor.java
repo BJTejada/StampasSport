@@ -165,8 +165,14 @@ public class Inicio_vendedor extends javax.swing.JFrame {
         jPanel2.setBounds(69, 41, 749, 473);
 
         btn_cerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/salida.png"))); // NOI18N
+        btn_cerrar.setText("Salir");
+        btn_cerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cerrarActionPerformed(evt);
+            }
+        });
         getContentPane().add(btn_cerrar);
-        btn_cerrar.setBounds(820, 10, 60, 60);
+        btn_cerrar.setBounds(820, 500, 90, 40);
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/W1.jpg"))); // NOI18N
         jLabel5.setMaximumSize(new java.awt.Dimension(890, 550));
@@ -199,6 +205,10 @@ this.dispose();
         ventas from = new ventas();
         from.setVisible(true);
     }//GEN-LAST:event_btn_ventasActionPerformed
+
+    private void btn_cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cerrarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_cerrarActionPerformed
 
     /**
      * @param args the command line arguments

@@ -12,6 +12,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -24,6 +26,7 @@ public class ventas extends javax.swing.JFrame {
     /**
      * Creates new form ventas
      */
+    double tott;
        private final Conexion con = new Conexion();
        private final Connection cn= con.conectar();
     DefaultTableModel modelo4;
@@ -33,11 +36,16 @@ public class ventas extends javax.swing.JFrame {
         modelo4 = new DefaultTableModel();
         modelo3 = new DefaultTableModel();
         
-        
-            modelo3.addColumn("Nombre");
+            modelo3.addColumn("Lote");
+            modelo3.addColumn("Concepto o Referencia");
             modelo3.addColumn("cantidad");
-            modelo3.addColumn("precio");
-            modelo3.addColumn("precio * cantidad");
+            modelo3.addColumn("Precio Unitario");
+            modelo3.addColumn("Importe");
+            
+            Date myDate = new Date();
+            
+          txt_fecha.setText(new SimpleDateFormat("dd/MM/yyyy").format(myDate));  
+            txt_fecha.enable(false);
         cargarcodigo();
         mostrar();
         verClientes();
@@ -64,7 +72,6 @@ public class ventas extends javax.swing.JFrame {
         btn_nuevo = new javax.swing.JButton();
         btn_cancelar = new javax.swing.JButton();
         btn_guardar = new javax.swing.JButton();
-        btn_editar = new javax.swing.JButton();
         btn_salir = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         txt_sub_total = new javax.swing.JTextField();
@@ -77,18 +84,12 @@ public class ventas extends javax.swing.JFrame {
         txtBuscar = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
-        jLabel12 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        txt_total4 = new javax.swing.JTextField();
+        btn_nuevo1 = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable3 = new javax.swing.JTable();
+        jLabel12 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(960, 600));
-        setMinimumSize(new java.awt.Dimension(960, 600));
-        setPreferredSize(new java.awt.Dimension(960, 600));
-        setResizable(false);
-        setSize(new java.awt.Dimension(960, 600));
-        getContentPane().setLayout(null);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -103,42 +104,47 @@ public class ventas extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(20, 230, 795, 270);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(960, 600));
+        setMinimumSize(new java.awt.Dimension(960, 600));
+        setPreferredSize(new java.awt.Dimension(960, 600));
+        setResizable(false);
+        setSize(new java.awt.Dimension(960, 600));
+        getContentPane().setLayout(null);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("No. factura:");
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(30, 30, 72, 15);
+        jLabel1.setBounds(60, 30, 72, 15);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Fecha:");
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(250, 30, 38, 15);
+        jLabel2.setBounds(340, 30, 38, 15);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Vendedor:");
         getContentPane().add(jLabel4);
-        jLabel4.setBounds(20, 510, 70, 15);
+        jLabel4.setBounds(90, 530, 70, 15);
         getContentPane().add(txt_factura);
-        txt_factura.setBounds(120, 20, 120, 30);
+        txt_factura.setBounds(170, 20, 120, 30);
 
         txt_fecha.setText("DD/MM/YYYY");
         getContentPane().add(txt_fecha);
-        txt_fecha.setBounds(310, 20, 100, 30);
+        txt_fecha.setBounds(400, 20, 140, 30);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Producto:");
         getContentPane().add(jLabel5);
-        jLabel5.setBounds(40, 60, 61, 30);
+        jLabel5.setBounds(60, 80, 61, 30);
 
         cb_cliente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         getContentPane().add(cb_cliente);
-        cb_cliente.setBounds(510, 20, 120, 30);
+        cb_cliente.setBounds(640, 20, 120, 30);
 
         btn_nuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/signo-mas-para-agregar.png"))); // NOI18N
         btn_nuevo.setText("Agregar ");
@@ -148,34 +154,27 @@ public class ventas extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btn_nuevo);
-        btn_nuevo.setBounds(830, 140, 120, 50);
+        btn_nuevo.setBounds(270, 130, 120, 30);
 
         btn_cancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/cancelar.png"))); // NOI18N
+        btn_cancelar.setText("Eliminar Producto");
         btn_cancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_cancelarActionPerformed(evt);
             }
         });
         getContentPane().add(btn_cancelar);
-        btn_cancelar.setBounds(830, 370, 50, 50);
+        btn_cancelar.setBounds(60, 430, 190, 41);
 
         btn_guardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/guardar.png"))); // NOI18N
+        btn_guardar.setText("Guardar Venta");
         btn_guardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_guardarActionPerformed(evt);
             }
         });
         getContentPane().add(btn_guardar);
-        btn_guardar.setBounds(830, 240, 50, 50);
-
-        btn_editar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/editar.png"))); // NOI18N
-        btn_editar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_editarActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btn_editar);
-        btn_editar.setBounds(830, 300, 50, 50);
+        btn_guardar.setBounds(270, 430, 190, 40);
 
         btn_salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/salida.png"))); // NOI18N
         btn_salir.setText("Regresar");
@@ -185,15 +184,15 @@ public class ventas extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btn_salir);
-        btn_salir.setBounds(840, 620, 120, 40);
+        btn_salir.setBounds(790, 520, 170, 40);
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Sub total:");
         getContentPane().add(jLabel9);
-        jLabel9.setBounds(540, 520, 90, 14);
+        jLabel9.setBounds(480, 430, 90, 14);
         getContentPane().add(txt_sub_total);
-        txt_sub_total.setBounds(640, 510, 153, 30);
+        txt_sub_total.setBounds(540, 450, 153, 30);
 
         jButton7.setText("Generar factura");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
@@ -202,27 +201,27 @@ public class ventas extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton7);
-        jButton7.setBounds(650, 600, 130, 30);
+        jButton7.setBounds(790, 480, 130, 30);
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setText("Cantidad:");
         getContentPane().add(jLabel10);
-        jLabel10.setBounds(250, 70, 59, 15);
+        jLabel10.setBounds(60, 140, 59, 15);
         getContentPane().add(txt_total);
-        txt_total.setBounds(640, 560, 153, 30);
+        txt_total.setBounds(770, 440, 153, 30);
         getContentPane().add(txt_cantidad);
-        txt_cantidad.setBounds(310, 60, 90, 30);
+        txt_cantidad.setBounds(170, 130, 90, 30);
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel11.setText("Total pagar");
+        jLabel11.setText("$");
         getContentPane().add(jLabel11);
-        jLabel11.setBounds(540, 570, 90, 14);
+        jLabel11.setBounds(760, 430, 30, 50);
 
         cb_vende.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         getContentPane().add(cb_vende);
-        cb_vende.setBounds(90, 510, 120, 30);
+        cb_vende.setBounds(160, 530, 120, 30);
 
         txtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -230,7 +229,7 @@ public class ventas extends javax.swing.JFrame {
             }
         });
         getContentPane().add(txtBuscar);
-        txtBuscar.setBounds(120, 60, 120, 30);
+        txtBuscar.setBounds(170, 70, 220, 30);
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -246,29 +245,53 @@ public class ventas extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTable2);
 
         getContentPane().add(jScrollPane2);
-        jScrollPane2.setBounds(20, 110, 800, 100);
-
-        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setText("Total pagar");
-        getContentPane().add(jLabel12);
-        jLabel12.setBounds(520, 540, 90, 14);
+        jScrollPane2.setBounds(410, 70, 520, 90);
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Cliente:");
         getContentPane().add(jLabel7);
-        jLabel7.setBounds(450, 30, 46, 15);
-        getContentPane().add(txt_total4);
-        txt_total4.setBounds(290, 540, 153, 30);
+        jLabel7.setBounds(570, 30, 46, 15);
+
+        btn_nuevo1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/signo-mas-para-agregar.png"))); // NOI18N
+        btn_nuevo1.setText("Agregar Cliente");
+        btn_nuevo1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_nuevo1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btn_nuevo1);
+        btn_nuevo1.setBounds(770, 20, 160, 30);
+
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(jTable3);
+
+        getContentPane().add(jScrollPane3);
+        jScrollPane3.setBounds(60, 190, 870, 230);
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setText("Total pagar");
+        getContentPane().add(jLabel12);
+        jLabel12.setBounds(690, 430, 90, 14);
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/W4.png"))); // NOI18N
         jLabel6.setToolTipText("");
-        jLabel6.setMaximumSize(new java.awt.Dimension(960, 570));
-        jLabel6.setMinimumSize(new java.awt.Dimension(960, 570));
-        jLabel6.setPreferredSize(new java.awt.Dimension(960, 570));
+        jLabel6.setMaximumSize(new java.awt.Dimension(960, 600));
+        jLabel6.setMinimumSize(new java.awt.Dimension(960, 600));
+        jLabel6.setPreferredSize(new java.awt.Dimension(960, 600));
         getContentPane().add(jLabel6);
-        jLabel6.setBounds(0, 0, 970, 670);
+        jLabel6.setBounds(0, -30, 970, 600);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -277,19 +300,15 @@ public class ventas extends javax.swing.JFrame {
         // TODO add your handling code here:
         
          int fsel; 
-        fsel=jTable1.getSelectedRow();
+        fsel=jTable3.getSelectedRow();
         double importe, total1;
-        importe=Double.parseDouble(jTable1.getValueAt(fsel,3).toString());
+        importe=Double.parseDouble(jTable3.getValueAt(fsel,3).toString());
        total1=Double.parseDouble(txt_total.getText()) - importe;
-           
+           modelo3.removeRow(fsel) ;
         txt_total.setText(""+total1);
     txt_sub_total.setText(""+ total1);
-        modelo3.removeRow(fsel) ;  
+          
     }//GEN-LAST:event_btn_cancelarActionPerformed
-
-    private void btn_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btn_editarActionPerformed
 
     private void btn_salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_salirActionPerformed
   this.dispose();
@@ -342,6 +361,7 @@ public class ventas extends javax.swing.JFrame {
 
     private void btn_nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_nuevoActionPerformed
         // TODO add your handling code here:
+          
             if(Integer.parseInt(txt_cantidad.getText())>0){
           try{
          //  
@@ -352,7 +372,9 @@ public class ventas extends javax.swing.JFrame {
              
            // 
        
-        int fsel=jTable2.getSelectedRow();
+       int fsel=jTable2.getSelectedRow();
+       
+        String lote=jTable2.getValueAt(fsel,0).toString();
         String nombre=jTable2.getValueAt(fsel,1).toString();
         //String Bcan=tablaExistencias1.getValueAt(fsel,0).toString()-cant;
         
@@ -366,15 +388,19 @@ public class ventas extends javax.swing.JFrame {
         double x;
         x=(Double.parseDouble(precio)*(Double.parseDouble(cant)));
         Resultado=String.valueOf(x);
-        String []Datos={nombre,cant,precio,Resultado};
+        String []Datos={lote,nombre,cant,precio,Resultado};
         
         
         modelo3.addRow(Datos);
         
         
-        jTable1.setModel(modelo3);
+        jTable3.setModel(modelo3);
         
         double calcula=(Double.parseDouble(Resultado));
+        tott=tott+calcula;
+        //String CA;
+        
+        txt_total.setText(""+tott);
       //  total=total + calcula;
       //  txtTotal.setText(""+total);
         
@@ -403,7 +429,12 @@ public class ventas extends javax.swing.JFrame {
 
     private void btn_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_guardarActionPerformed
         // TODO add your handling code here:
-       
+       DefaultTableModel vacio;
+       vacio = new DefaultTableModel();
+        vacio.addColumn("lote");
+         vacio.addColumn("Producto");
+        vacio.addColumn("precio");
+          vacio.addColumn("cantidad");
         Ventas nventas = new Ventas();
         String cadena;
         String []cadena2;
@@ -415,14 +446,14 @@ public class ventas extends javax.swing.JFrame {
         cadena1= cb_vende.getSelectedItem().toString(); 
         cadena3=cadena1.split("-");
         
-        nventas.insertarVenta(txt_fecha.getText(),txt_factura.getText(),Double.parseDouble(txt_sub_total.getText()),Double.parseDouble(txt_total.getText()),Integer.parseInt(cadena2[0]),Integer.parseInt(cadena3[0]));
+        nventas.insertarVenta(txt_fecha.getText(),txt_factura.getText(),Double.parseDouble(txt_sub_total.getText()),Double.parseDouble(txt_total.getText()),Integer.parseInt(cadena2[0]),1);
         
         
         try{
          
         
             
-       
+        modelo4.addColumn("lote");
          modelo4.addColumn("Producto");
          modelo4.addColumn("precio");
           modelo4.addColumn("cantidad");
@@ -430,11 +461,11 @@ public class ventas extends javax.swing.JFrame {
            
   
         //String eje[];
-        for(int i=0;i<jTable1.getRowCount();i++)
+        for(int i=0;i<jTable3.getRowCount();i++)
         {
              
           
-           String elemento[]={jTable1.getValueAt(i, 0).toString(),jTable1.getValueAt(i, 1).toString(),jTable1.getValueAt(i, 2).toString()};
+           String elemento[]={jTable3.getValueAt(i, 0).toString(),jTable3.getValueAt(i, 1).toString(),jTable3.getValueAt(i, 2).toString(),jTable3.getValueAt(i, 3).toString()};
           
         
          modelo4.addRow(elemento);
@@ -446,6 +477,10 @@ public class ventas extends javax.swing.JFrame {
         
         Ventas func2= new Ventas();
         func2.insertarDetalle(modelo4);
+        mostrar();
+        cargarcodigo();
+      jTable3.setModel(vacio);
+        
         }
         catch (Exception e){
              JOptionPane.showMessageDialog(null,e.toString());
@@ -512,6 +547,10 @@ public class ventas extends javax.swing.JFrame {
         
     }//GEN-LAST:event_txtBuscarKeyReleased
 
+    private void btn_nuevo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_nuevo1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_nuevo1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -549,9 +588,9 @@ public class ventas extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_cancelar;
-    private javax.swing.JButton btn_editar;
     private javax.swing.JButton btn_guardar;
     private javax.swing.JButton btn_nuevo;
+    private javax.swing.JButton btn_nuevo1;
     private javax.swing.JButton btn_salir;
     private javax.swing.JComboBox<String> cb_cliente;
     private javax.swing.JComboBox<String> cb_vende;
@@ -568,14 +607,15 @@ public class ventas extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTable3;
     private javax.swing.JTextField txtBuscar;
     private javax.swing.JTextField txt_cantidad;
     private javax.swing.JTextField txt_factura;
     private javax.swing.JFormattedTextField txt_fecha;
     private javax.swing.JTextField txt_sub_total;
     private javax.swing.JTextField txt_total;
-    private javax.swing.JTextField txt_total4;
     // End of variables declaration//GEN-END:variables
 }

@@ -29,7 +29,7 @@ public class Ventas {
                csta.setDouble(4,total);
                csta.setInt(5,idcli);
                csta.setInt(6,idempleado);
-               rs=csta.executeQuery();
+              rs=csta.executeQuery();
            }
            catch(SQLException e){
                JOptionPane.showMessageDialog(null, "no pudo insertarse " + e);
@@ -38,11 +38,11 @@ public class Ventas {
     public void insertarDetalle(DefaultTableModel modelo1){
            try{
                for(int i=0;modelo1.getRowCount()>i;i++){
-               CallableStatement csta=cn.prepareCall("{call insertarDetalleventa(?,?,?)}");
+               CallableStatement csta=cn.prepareCall("{call insertarDetalleventa(?,?,?,?)}");
                csta.setInt(1,Integer.parseInt(modelo1.getValueAt(i,0).toString()));
-            csta.setDouble(2,Double.parseDouble(modelo1.getValueAt(i,1).toString()));
+            csta.setString(2,modelo1.getValueAt(i,1).toString());
              csta.setInt(3,Integer.parseInt(modelo1.getValueAt(i,2).toString()));
-            
+            csta.setInt(4,Integer.parseInt(modelo1.getValueAt(i,3).toString()));
              // csta.setString(6,modelo1.getValueAt(i,5).toString());
                
                

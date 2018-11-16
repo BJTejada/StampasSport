@@ -926,7 +926,7 @@ void VActualizacionEmp(){
             }
             try{
                 conn=Conexion.conectar(conn);//INVOCANDO LA CONEXION DESDE LA CLASE main
-                String sql1="{call actualizaremp(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";//QUERY
+                String sql1="{call actualizarEmp(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";//QUERY
                 CallableStatement pst=conn.prepareCall(sql1);//EJECUCION DE QUERY POR MEDIO DE STATEMENT
                 //ASIGANAR DE VARIABLES A LOS PARAMETROS DE QUERY
                 pst.setString(1, this.txt_nombre.getText());
